@@ -1,0 +1,30 @@
+import wixData from 'wix-data';
+
+const databaseName = 'subscribers03';
+const databaseField = 'userInterests';
+
+$w.onReady(function () {
+
+$w('#selectionTags1').onChange((event) => {
+	const selectedTag = $w('#selectionTags1').value;
+	addItemstoRepeater(selectedTag);
+})
+});
+
+function addItemstoRepeater(selectedOption = []) {
+
+let dataQuery = wixData.query(databaseName);
+
+if (selectedOption.length > 0) {
+	dataQuery = dataQuery.hasSome(databaseField, selectedOption);
+}
+
+dataQuery
+	.find()
+	.then(results => {
+		const filtereditemsReady = results.items;
+		$w('#repeaterID').data = filtereditemsReady;
+
+	})
+}
+
